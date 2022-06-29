@@ -13,17 +13,16 @@ In this activity, you will:
 
 ## ☑️ Task 1: The Workflow
 
+![fork](README-img/fork-icon.png) **Fork** this repo and clone it to a
+new [RStudio Project](https://rstudio.gvsu.edu/).
+
 Remember that more detailed directions can be found in [Task 1 of
 Activity
-4](https://github.com/gvsu-sta518/activity04-data-pipelines#%EF%B8%8F-task-1-the-workflow).
-
-![fork](README-img/fork-icon.png) **Fork** this repo and clone it to a
-new [RStudio Project](https://rstudio.gvsu.edu/)
+6](https://github.com/gvsu-sta518/activity06-pivoting#%EF%B8%8F-task-1-the-workflow).
 
 <img src="README-img/noun_pause.png" alt="pause" width = "20"/>
 <b>Planned Pause Point</b>: If you have any questions, contact your
-instructor or another group. We will complete this Activity during our
-next class session
+instructor or another group.
 
 ## ☑️ Task 2: Complete the RMarkdown File
 
