@@ -26,6 +26,11 @@ One way to make sure that you get similar results each time is to always run all
 For this activity, you will need the `{tidyverse}`.
 
 **delete this line and load `{tidyverse}`**
+```{r Load in the tidyverse}
+
+library(tidyverse)
+
+```
 
 
 ## Exploration
@@ -59,11 +64,35 @@ ggplot(norm_samp_1000, aes(x = values)) +
 
 Using `norm_samp_1000`, obtain the mean and standard deviation of this sample?
 
+```{r mean and standard deviation}
+
+
+norm_samp_1000 %>%
+  summarise(values) %>%
+  mutate(mean = mean(values), sd = sd(values))
+
+
+
+
+```
 
 
 Now, create a new simulation.
 In this you will obtain a sample of size 30 from from a Normally distributed variable with a mean 50 and standard deviation 10, and find the mean and standard deviation.
 How do the mean and standard deviation compare to your answers above?
+
+Standard deviation is larger and mean is lower
+
+```{r New sim}
+
+norm_mine <- tibble(
+  values = rnorm(n = 30, mean = 50, sd = 10)
+)
+
+
+mean(norm_mine$values)
+sd(norm_mine$values)
+```
 
 
 
@@ -73,6 +102,23 @@ Using a similar process, obtain Exponentially distributed variable (`?rexp`) wit
 Obtain a sample of 1,000 observations and a sample of 30 observations.
 Then, calculate the mean and standard deviation of each sample and discuss how the values are similar and how they differ.
 
+```{r exponential distributed values}
+
+Beig_rexp <- tibble(rexp(1000, rate = 0.02)
+)
+
+smol_rexp <- tibble(rexp(30, rate = 0.02))
+
+mean(Beig_rexp$`rexp(1000, rate = 0.02)`)
+mean(smol_rexp$`rexp(30, rate = 0.02)`)
+
+sd(Beig_rexp$`rexp(1000, rate = 0.02)`)
+sd(smol_rexp$`rexp(30, rate = 0.02)`)
+
+```
+
+Both means are in the same ball park with the smaller one being larger
+SD's have a larger difference between them
 
 
 
@@ -92,6 +138,24 @@ This function should produce a dataset with `n` rows.
 You should **not** use the default parameter options for these distributions (e.g., your Normal data should not have a mean of 0 or a standard deviation of 1).
 Test your function with `n = 30` and `n = 1000`.
 
+```{r I think this should be for the function}
+
+generate_n_samples <- function(n, x, y, ...) {
+  tibble(
+    Normal = rnorm(n),
+    Exponential = rexp(n),
+    chi_sqaure = rchisq(n, df = x),
+    uniform = runif(n, min = x, max = y)
+  )
+
+  
+  
+}
+
+
+generate_n_samples(1000, x = 1, y = 2)
+
+```
 
 
 
@@ -109,10 +173,10 @@ These are the "population values".
 
 | Distribution | Mean       | SD         |
 |--------------|------------|------------|
-| Normal       |            |            |
-| Exponential  |            |            |
-| Chi-square   |            |            |
-| Uniform      |            |            |
+| Normal       |-0.09452011		 0.903102         |
+| Exponential  |0.9997024      0.7421076
+| Chi-square   |0.9764978      1.739869	
+| Uniform      |  1.519723     0.2903031
 
 
 Below I provide you with a function that calculates the sample mean for each column/distribution.
@@ -122,6 +186,15 @@ sample_mean <- function(.data){
   .data %>% 
     summarise(across(everything(), mean, .names = "mean_{.col}"))
 }
+
+sample_sd <- function(.data){
+  .data %>% 
+    summarise(across(everything(), sd, .names = "sd_{.col}"))
+}
+
+
+sample_mean(generate_n_samples(100, 1, 2))
+sample_sd(generate_n_samples(100, 1, 2))
 ```
 
 First, verify that you know what each line of this function is doing.
@@ -138,19 +211,31 @@ We previously looked at taking one sample at a time.
 To explore the Central Limit Theorem (CLT), we need to generate multiple samples.
 The `BASE::replicate`, `purrr::rerun`, or `purr::map_*` functions are convenient ways to generate multiple samples of data.
 
+
+```{r installing purrr}
+
+library(purrr)
+
 ```
+
+
+```{r yoooooooo}
 # Each of these generate 1,000 samples of n = 30 from a normal(mean = 50, sd = 10)
 
 # BASE::replicate()
 ## simplify = FALSE keeps the results as a list 
 ## rather than coercing them to an array/matrix
+
+  
 replicate(1000, rnorm(30, mean = 50, sd = 10), simplify = FALSE)
 
 # purrr::rerun
 rerun(1000, rnorm(30, mean = 50, sd = 10))
 
-# This could also be done in purr::map 
+
 map(1:1000, ~rnorm(30, mean = 50, sd = 10))
+
+
 ```
 
 Continuing to work with your multiple distribution sample generator from above, generate 1,000 samples from the four distributions each with size 30.
@@ -161,7 +246,20 @@ We will want to continue to work with this list so be sure to assign these sampl
 Calculate the sample mean of each sample using the appropriate `map` function and my `sample_mean` function to produce a *data frame* of multiple sample means from your multiple samples object.
 Assign these sample means to an appropriately named object.
 
+```{r install infer package}
 
+library(infer)
+
+```
+
+
+
+```{r We will TRY (KEYWORD) to get a nice df in this}
+
+The_real_samples <- map_df(1:1000, ~generate_n_samples(30, x = 1, y = 2))
+
+
+```
 
 
 
